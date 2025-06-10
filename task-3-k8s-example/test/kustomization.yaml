@@ -6,3 +6,4 @@ namespace: test
 
 resources:
   - namespace.yaml
+  - ../base/postgres
