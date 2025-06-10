@@ -1,0 +1,8 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# Align with namespace.yaml
+namespace: test
+
+resources:
+  - namespace.yaml
