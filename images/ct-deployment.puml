@@ -1,0 +1,22 @@
+@startuml Basic Sample
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Person(client, "Client")
+System_Boundary(sys_dv, "Dataverse Deployment") {
+    Container(app, "Dataverse", "App, Payara, Java & Tools", "gdcc/dataverse:6.6-noble")
+    Container(db, "PostgreSQL", "", "postgres:16")
+    Container(index, "Solr", "", "solr:9.8.0")
+    Container(config, "ConfigBaker", "", "gdcc/configbaker:6.6-noble")
+}
+System(s3, "S3 Storage")
+
+Rel_R(client, app, "Uses", "HTTP/S")
+Rel_R(client, config, "Deploys")
+
+Rel_R(app, db, "Uses", "Binary protocol")
+Rel_L(app, index, "Uses", "HTTP")
+Rel_R(app, s3, "Uses", "HTTP")
+
+Rel(config, app, "Configures", "HTTP")
+
+@enduml

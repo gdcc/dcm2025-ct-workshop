@@ -1,0 +1,25 @@
+@startuml Basic Sample
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+System_Boundary(sys_dv, "Dataverse Deployment") {
+    Container(app, "Dataverse", "StatefulSet", "gdcc/dataverse:6.6-noble")
+    Container(db, "PostgreSQL", "StatefulSet", "postgres:16")
+    Container(index, "Solr", "StatefulSet", "solr:9.8.0")
+    Container(config, "ConfigBaker", "Job", "gdcc/configbaker:6.6-noble")
+    Container(jvmopt, "JVM Options", "ConfigMap")
+    Container(dbopt, "DB Options", "ConfigMap")
+    Container(sec, "Secrets", "Secret")
+}
+
+Rel(app, db, "Uses", "Binary protocol")
+Rel(app, index, "Uses", "HTTP")
+Rel_R(app, jvmopt, "Consumes")
+Rel(app, dbopt, "Consumes")
+Rel(app, sec, "Consumes")
+
+Rel(config, app, "Configures", "HTTP")
+Rel(config, jvmopt, "Consumes")
+Rel(config, dbopt, "Consumes")
+Rel(config, sec, "Consumes")
+
+@enduml
